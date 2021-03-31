@@ -33,6 +33,11 @@
 	<td>//div[@class='product-gallery']//img[contains(@src, '${key_FSProductImage}')]</td>
 	<td></td>
 </tr>
+<tr>
+	<td>IMAGE_CARD_U_JOINT</td>
+	<td>//div[contains(@style,'u-joint')]</td>
+	<td></td>
+</tr>
 </tbody>
 </table>
 </body>

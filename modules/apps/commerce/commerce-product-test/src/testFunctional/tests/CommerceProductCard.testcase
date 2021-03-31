@@ -105,7 +105,32 @@ definition {
 	test AssertProductCardImageRedirectsToProductDetailsPage {
 		property portal.acceptance = "false";
 
-		// TODO COMMERCE-5856 AssertProductCardImageRedirectsToProductDetailsPage pending implementation
+	    CommerceAccelerators.initializeNewSiteViaAccelerator(siteName = "Minium");
+
+        ApplicationsMenu.gotoSite(site = "Minium");
+
+        CommerceNavigator.gotoMiniumSidebarItem(menuItem = "Account Management");
+
+        CommerceAcceleratorsInitializer.createNewAccountViaFront(
+            accountName = "Commerce Account",
+            adminEmailAddress = "test@liferay.com");
+
+        Click(
+            key_navUnderline = "Members",
+            locator1 = "NavUnderline#NAV_UNDERLINE_LINK");
+
+        CommerceAcceleratorsInitializer.inviteNewMemberWithRoleToAccount(
+            emailAddress = "buyertester@test.com",
+            role = "Buyer");
+
+        Navigator.openWithAppendToBaseURL(urlAppend = "web/minium");    
+
+        Click(locator1 = "CommerceFrontStore#IMAGE_CARD_U_JOINT");
+
+        AssertElementPresent(
+            value = "Product Detail",
+            locator1 = "Publications#MANGE_PUBLICATIONS_PAGE_TITLE");
+        
 	}
 
 	@description = "COMMERCE-5858. As a buyer, I want to view the catalog default product image if set"
