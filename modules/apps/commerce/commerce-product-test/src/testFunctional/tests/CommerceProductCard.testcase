@@ -100,37 +100,35 @@ definition {
 	}
 
 	@description = "COMMERCE-5856. As a buyer, I want to view the product image container in the top area and I want to be able to click on the product image to navigate to the product detail page"
-	@ignore = "true"
 	@priority = "3"
 	test AssertProductCardImageRedirectsToProductDetailsPage {
 		property portal.acceptance = "false";
 
-	    CommerceAccelerators.initializeNewSiteViaAccelerator(siteName = "Minium");
+		CommerceAccelerators.initializeNewSiteViaAccelerator(siteName = "Minium");
 
-        ApplicationsMenu.gotoSite(site = "Minium");
+		ApplicationsMenu.gotoSite(site = "Minium");
 
-        CommerceNavigator.gotoMiniumSidebarItem(menuItem = "Account Management");
+		CommerceNavigator.gotoMiniumSidebarItem(menuItem = "Account Management");
 
-        CommerceAcceleratorsInitializer.createNewAccountViaFront(
-            accountName = "Commerce Account",
-            adminEmailAddress = "test@liferay.com");
+		CommerceAcceleratorsInitializer.createNewAccountViaFront(
+			accountName = "Commerce Account",
+			adminEmailAddress = "test@liferay.com");
 
-        Click(
-            key_navUnderline = "Members",
-            locator1 = "NavUnderline#NAV_UNDERLINE_LINK");
+		Click(
+			key_navUnderline = "Members",
+			locator1 = "NavUnderline#NAV_UNDERLINE_LINK");
 
-        CommerceAcceleratorsInitializer.inviteNewMemberWithRoleToAccount(
-            emailAddress = "buyertester@test.com",
-            role = "Buyer");
+		CommerceAcceleratorsInitializer.inviteNewMemberWithRoleToAccount(
+			emailAddress = "buyertester@test.com",
+			role = "Buyer");
 
-        Navigator.openWithAppendToBaseURL(urlAppend = "web/minium");    
+		Navigator.openWithAppendToBaseURL(urlAppend = "web/minium");
 
-        Click(locator1 = "CommerceFrontStore#IMAGE_CARD_U_JOINT");
+		Click(locator1 = "CommerceFrontStore#IMAGE_CARD_U_JOINT");
 
-        AssertElementPresent(
-            value = "Product Detail",
-            locator1 = "Publications#MANGE_PUBLICATIONS_PAGE_TITLE");
-        
+		AssertElementPresent(
+			locator1 = "Publications#MANGE_PUBLICATIONS_PAGE_TITLE",
+			value = "Product Detail");
 	}
 
 	@description = "COMMERCE-5858. As a buyer, I want to view the catalog default product image if set"
