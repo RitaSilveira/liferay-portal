@@ -160,12 +160,22 @@ definition {
 	}
 
 	@description = "COMMERCE-5856. As a buyer, I want to view the product image container in the top area and I want to be able to click on the product image to navigate to the product detail page"
-	@ignore = "true"
 	@priority = "3"
 	test AssertProductCardImageRedirectsToProductDetailsPage {
 		property portal.acceptance = "false";
 
-		// TODO COMMERCE-5856 AssertProductCardImageRedirectsToProductDetailsPage pending implementation
+		CommerceAccelerators.initializeNewSiteViaAccelerator(siteName = "Minium");
+
+		ApplicationsMenu.gotoSite(site = "Minium");
+
+		Click(
+			key_value = "u-joint",
+			locator1 = "CommerceFrontStore#PRODUCT_CARD_IMAGE");
+
+		AssertElementPresent(
+			locator1 = "Publications#MANGE_PUBLICATIONS_PAGE_TITLE",
+			value = "Product Detail");
+
 	}
 
 	@description = "COMMERCE-5858. As a buyer, I want to view the catalog default product image if set"

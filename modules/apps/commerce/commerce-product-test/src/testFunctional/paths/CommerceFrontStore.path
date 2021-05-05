@@ -48,6 +48,11 @@
 	<td>//div[@class='mini-compare-item active'][${key_value}]//div[@class='mini-compare-thumbnail']</td>
 	<td></td>
 </tr>
+<tr>
+	<td>PRODUCT_CARD_IMAGE</td>
+	<td>//div[contains(@style,'${key_value}')]</td>
+	<td></td>
+</tr>
 </tbody>
 </table>
 </body>
