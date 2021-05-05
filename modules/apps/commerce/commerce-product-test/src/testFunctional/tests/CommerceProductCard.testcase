@@ -175,7 +175,6 @@ definition {
 		AssertElementPresent(
 			locator1 = "Publications#MANGE_PUBLICATIONS_PAGE_TITLE",
 			value = "Product Detail");
-
 	}
 
 	@description = "COMMERCE-5858. As a buyer, I want to view the catalog default product image if set"
