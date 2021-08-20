@@ -1710,7 +1710,7 @@ definition {
 			AssertTextPresent(
 				locator1 = "ContentDashboard#FILTER_TEXT",
 				value1 = "Category:Test");
-		}	
+		}
 	}
 
 	@description = "LPS-120676 When there are filters already applied and the user clicks in a bar, the new filters corresponding to the categories in that bar are applied, they are shown as filter labels in the management tool bar and the list of contents is filtered by them"
@@ -1765,12 +1765,11 @@ definition {
 
 			AssertTextPresent(
 				locator1 = "ContentDashboard#FILTER_TEXT",
-				value1 = "Category:S 1");	
+				value1 = "Category:S 1");
 
 			AssertTextPresent(
 				locator1 = "ContentDashboard#FILTER_TEXT",
 				value1 = "Category:test 1");
-
 		}
 	}
 
