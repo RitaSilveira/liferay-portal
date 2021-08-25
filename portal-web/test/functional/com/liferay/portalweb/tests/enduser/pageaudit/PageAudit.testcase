@@ -647,6 +647,105 @@ definition {
 		}
 	}
 
+	@description = "LPS-135681: Given the Page Audit panel when the invalid API Key error is retrieved
+	When the user clicks on the Set API Key button
+	Then the user navigates to Site settings > Pages > Google PageSpeed Insights tab"
+	@priority = "4"
+	test InvalidApiKey {
+		property portal.acceptance = "true";
+		property test.name.skip.portal.instance = "PageAudit#InvalidApiKey";
+
+		task ("Enable Google PageSpeed") {
+			PageAudit.enableGooglePageSpeed();
+
+			Refresh();
+		}
+
+		task ("Set Google PageSpeed API") {
+			PageAudit.setAPIViaSystemSettings(apiKey = "invalidAPI");
+
+			Alert.viewSuccessMessage();
+		}
+
+		task ("Open Page Audit panel and View invalid API Key error") {
+			Navigator.openWithAppendToBaseURL(urlAppend = "web/test-site-name/content-page");
+
+			PageAudit.openPanelAfterConfiguration(pageName = "Content Page");
+
+			WaitForElementPresent(
+				errorTitle = "The API key is invalid.",
+				locator1 = "PageAudit#ERROR_WARNING_TITLE");
+		}
+
+		task ("Go to Site settings > Pages throught the 'Configure' button in panel and Assert page") {
+			PageAudit.connectToGooglePageAudit();
+
+			AssertElementPresent(
+				key_breadcrumbName = "Site Settings",
+				locator1 = "Breadcrumb#BREADCRUMB_ENTRY_LINK");
+
+			AssertTextPresent(
+				locator1 = "Breadcrumb#BREADCRUMB_ENTRY_ACTIVE_ENTRY",
+				value1 = "Pages");
+
+			AssertTextPresent(
+				locator1 = "PageAudit#GOOGLE_PAGESPEED_TITLE",
+				value1 = "Google PageSpeed Insights");
+		}
+	}
+
+	@description = "LPS-127668: Given the page audit panel
+	When the users access the second level
+	Then they can see the title of the issue, the description and tips sections"
+	@priority = "4"
+	@uitest
+	test NavigateToSecondLevel {
+		property portal.acceptance = "true";
+		property test.name.skip.portal.instance = "PageAudit#NavigateToSecondLevel";
+
+		task ("Set a custom page as canonical URL to have data already loaded") {
+			PageAudit.setSEOcanonicalURL(URL = "https://liferay-tango.github.io/liferay-portal/page-audit-test");
+		}
+
+		task ("Enable Google PageSpeed") {
+			PageAudit.enableGooglePageSpeed();
+		}
+
+		task ("Set Google PageSpeed API") {
+			Navigator.openWithAppendToBaseURL(urlAppend = "web/test-site-name/content-page");
+
+			PageAudit.setAPIViaSiteSettings(apiKey = "AIzaSyAq-oKsvIhlYHdk1UXCFy63h74ECIgbgbE");
+		}
+
+		task ("Open Page Audit panel and navigate to the second level of an issue") {
+			Navigator.openWithAppendToBaseURL(urlAppend = "web/test-site-name/content-page");
+
+			PageAudit.openPanelAfterConfiguration(pageName = "Content Page");
+
+			PageAudit.goToDetailView(failingCheckName = "Low Contrast Ratio");
+
+			AssertTextPresent(
+				locator1 = "PageAudit#FAILING_CHECK_TITLE",
+				value1 = "Low Contrast Ratio");
+
+			AssertTextPresent(
+				locator1 = "PageAudit#PANEL_TITLE",
+				value1 = "DESCRIPTION");
+
+			AssertTextPresent(
+				locator1 = "PageAudit#PANEL_TITLE",
+				value1 = "TIPS");
+
+			AssertElementPresent(
+				badgeValue = "1",
+				locator1 = "PageAudit#BADGE_NUMBER");
+
+			AssertTextPresent(
+				locator1 = "PageAudit#FAILING_ELEMENT_NAME",
+				value1 = "color-contrast");
+		}
+	}
+
 	@description = "LPS-135681: Given the Page Audit panel in its initial state (no API Key configured)
 	When the user clicks on the Configure button
 	Then the user navigates to Site settings > Pages > Google PageSpeed Insights tab"
@@ -1031,104 +1130,5 @@ definition {
 				value1 = "Your page has no issues.");
 		}
 	}
-	@description = "LPS-135681: Given the Page Audit panel when the invalid API Key error is retrieved
-	When the user clicks on the Set API Key button
-	Then the user navigates to Site settings > Pages > Google PageSpeed Insights tab"
-	@priority = "4"
-	test InvalidApiKey {
-		property portal.acceptance = "true";
-		property test.name.skip.portal.instance = "PageAudit#InvalidApiKey";
-
-		task ("Enable Google PageSpeed") {
-			PageAudit.enableGooglePageSpeed();
-
-			Refresh();
-		}
-
-		task ("Set Google PageSpeed API") {
-			PageAudit.setAPIViaSystemSettings(apiKey = "invalidAPI");
-
-			Alert.viewSuccessMessage();
-		}
-
-		task ("Open Page Audit panel and View invalid API Key error") {
-			Navigator.openWithAppendToBaseURL(urlAppend = "web/test-site-name/content-page");
-
-			PageAudit.openPanelAfterConfiguration(pageName = "Content Page");
-
-			WaitForElementPresent(
-				errorTitle = "The API key is invalid.",
-				locator1 = "PageAudit#ERROR_WARNING_TITLE");
-		}
-
-		task ("Go to Site settings > Pages throught the 'Configure' button in panel and Assert page") {
-			PageAudit.connectToGooglePageAudit();
-
-			AssertElementPresent(
-				key_breadcrumbName = "Site Settings",
-				locator1 = "Breadcrumb#BREADCRUMB_ENTRY_LINK");
-
-			AssertTextPresent(
-				locator1 = "Breadcrumb#BREADCRUMB_ENTRY_ACTIVE_ENTRY",
-				value1 = "Pages");
-
-			AssertTextPresent(
-				locator1 = "PageAudit#GOOGLE_PAGESPEED_TITLE",
-				value1 = "Google PageSpeed Insights");
-		}
-	}
-
-	@description = "LPS-127668: Given the page audit panel
-	When the users access the second level
-	Then they can see the title of the issue, the description and tips sections"
-	@priority = "4"
-	@uitest
-	test NavigateToSecondLevel {
-		property portal.acceptance = "true";
-		property test.name.skip.portal.instance = "PageAudit#NavigateToSecondLevel";
-
-		task ("Set a custom page as canonical URL to have data already loaded") {
-			PageAudit.setSEOcanonicalURL(URL = "https://liferay-tango.github.io/liferay-portal/page-audit-test");
-		}
-
-		task ("Enable Google PageSpeed") {
-			PageAudit.enableGooglePageSpeed();
-		}
-
-		task ("Set Google PageSpeed API") {
-			Navigator.openWithAppendToBaseURL(urlAppend = "web/test-site-name/content-page");
-
-			PageAudit.setAPIViaSiteSettings(apiKey = "AIzaSyAq-oKsvIhlYHdk1UXCFy63h74ECIgbgbE");
-		}
-
-		task ("Open Page Audit panel and navigate to the second level of an issue") {
-			Navigator.openWithAppendToBaseURL(urlAppend = "web/test-site-name/content-page");
-
-			PageAudit.openPanelAfterConfiguration(pageName = "Content Page");
-
-			PageAudit.goToDetailView(failingCheckName = "Low Contrast Ratio");
-
-			AssertTextPresent(
-				locator1 = "PageAudit#FAILING_CHECK_TITLE",
-				value1 = "Low Contrast Ratio");
-
-			AssertTextPresent(
-				locator1 = "PageAudit#PANEL_TITLE",
-				value1 = "DESCRIPTION");
-
-			AssertTextPresent(
-				locator1 = "PageAudit#PANEL_TITLE",
-				value1 = "TIPS");
-
-			AssertElementPresent(
-				badgeValue = "1",
-				locator1 = "PageAudit#BADGE_NUMBER");
-
-			AssertTextPresent(
-				locator1 = "PageAudit#FAILING_ELEMENT_NAME",
-				value1 = "color-contrast");
-		}
-	}
-
 
 }
