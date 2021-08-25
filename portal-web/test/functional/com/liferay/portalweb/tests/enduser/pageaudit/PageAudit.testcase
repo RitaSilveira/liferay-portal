@@ -1084,4 +1084,51 @@ definition {
 		}
 	}
 
+	@description = "LPS-135681: Given the Page Audit panel when the invalid API Key error is retrieved
+	When the user clicks on the Set API Key button
+	Then the user navigates to Site settings > Pages > Google PageSpeed Insights tab"
+	@priority = "4"
+	test InvalidApiKey {
+		property portal.acceptance = "true";
+		property test.name.skip.portal.instance = "PageAudit#InvalidApiKey";
+
+		task ("Enable Google PageSpeed") {
+			PageAudit.enableGooglePageSpeed();
+
+			Refresh();
+		}
+
+		task ("Set Google PageSpeed API") {
+			PageAudit.setAPIViaSystemSettings(apiKey = "invalidAPI");
+
+			Alert.viewSuccessMessage();
+		}
+
+		task ("Open Page Audit panel and assert 'Show details' link") {
+			Navigator.openWithAppendToBaseURL(urlAppend = "web/test-site-name/content-page");
+
+			PageAudit.openPanelAfterConfiguration(pageName = "Content Page");
+
+			WaitForElementPresent(
+				errorTitle = "The API key is invalid.",
+				locator1 = "PageAudit#ERROR_WARNING_TITLE");
+		}
+		
+		task ("Go to Site settings > Pages throught the 'Configure' button in panel and Assert page") {
+			PageAudit.connectToGooglePageAudit();
+
+			AssertElementPresent(
+				key_breadcrumbName = "Site Settings",
+				locator1 = "Breadcrumb#BREADCRUMB_ENTRY_LINK");
+
+			AssertTextPresent(
+				locator1 = "Breadcrumb#BREADCRUMB_ENTRY_ACTIVE_ENTRY",
+				value1 = "Pages");
+
+			AssertTextPresent(
+				locator1 = "PageAudit#GOOGLE_PAGESPEED_TITLE",
+				value1 = "Google PageSpeed Insights");
+		}
+	}
+
 }
